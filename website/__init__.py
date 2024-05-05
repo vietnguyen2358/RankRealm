@@ -1,5 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from os import path
+
+from flask_login import LoginManager
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -16,4 +19,20 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
+    from .models import User, Game, Leaderboard, PlayerPerformance, Event
+
+    create_database(app)
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
+
     return app
+
+def create_database(app):
+    with app.app_context():
+        if not path.exists('website/' + DB_NAME):
+            db.create_all()
+            print('Created Database')
+        else:
+            print('Database already exists')

@@ -1,6 +1,36 @@
 {% extends "base.html" %}
-{% block title %}Sign Up{% endblock %}
+{% block title %}Register | Rank Realm{% endblock %}
 
 {% block content %}
-    <h1>sign up</h1>
-{% endblock %}
+{% include 'navbar.html' %}
+
+<div class="row">
+    <div class="col-4 offset-4">
+        <div class="card mt-5 mb-3">
+            <form method="post">
+                <h1 class="text-center my-5" id="welcome">Register</h1>
+                <div class="card-body">
+                    <label >Email:</label>
+                     <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" name="email">
+                </div>
+                <div class="card-body">
+                    <label>Username:</label>
+                     <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" name="username">
+                </div>
+                <div class="card-body">
+                    <label>Password:</label>
+                <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter password" name="pwd1">
+                </div>
+                <div class="card-body">
+                    <label>Re-enter Password:</label>
+                <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password" name="pwd2">
+                </div>    
+                <div class="text-center my-3">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+                <p class="text-center my-3">Already have an account?  <a class="bottom" href="{{url_for('auth.login')}}"> Login here</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

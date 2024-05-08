@@ -9,9 +9,9 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True)
     email = db.Column(db.String(150), unique=True)
     password_hash = db.Column(db.String(150))
-    player_performances = db.relationship('PlayerPerformance', backref='user', lazy='dynamic')
-    hosted_events = db.relationship('Event', backref='host', lazy='dynamic')
-    player_performances = db.relationship('Event', backref='player', lazy='dynamic')
+    # player_performances = db.relationship('PlayerPerformance', backref='user', lazy='dynamic')
+    # hosted_events = db.relationship('Event', backref='host', lazy='dynamic')
+    # player_performances = db.relationship('Event', backref='player', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
@@ -33,7 +33,7 @@ class Leaderboard(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
     player_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    player_performances = db.relationship('PlayerPerformance', backref='leaderboard', lazy='dynamic')
+    # player_performances = db.relationship('PlayerPerformance', backref='leaderboard', lazy='dynamic')
 
 # Define a player performance schema
 class PlayerPerformance(db.Model):

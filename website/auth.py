@@ -1,5 +1,6 @@
 import re
 from flask import Blueprint, flash, redirect, render_template, url_for, request
+from flask_login import login_user, login_required, logout_user, current_user
 from .models import User, db
 
 auth = Blueprint('auth', __name__)
@@ -12,16 +13,19 @@ def login():
         inputEmail = request.form.get('email')
         inputPassword = request.form.get('password1')
         dbUser = User.query.filter_by(email=inputEmail).first()
-        if dbUser is None:
-            flash('Invalid Email', category='error')
-        elif dbUser.check_password(inputPassword):
-            return render_template('home.html')
+        if dbUser:
+            if dbUser.check_password(inputPassword):
+                flash('Logged in successfully', category='success')
+                login_user(dbUser, remember=True)
+                return redirect(url_for('views.home'))
         else:
-            flash('Incorrect Password', category='error')
-    return render_template('login.html')
+            flash('Invalid email or password', category='error')
+    return render_template('login.html', user=current_user)
 
 @auth.route('/logout')
+@login_required
 def logout():
+    logout_user()
     return redirect(url_for('auth.login'))
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
@@ -40,13 +44,18 @@ def sign_up():
         elif len(regpassword1) < 7:
             flash('Minimum 8 characters required', category='error')
         else:
-            flash('Account created!', category='success')
-            new_user = User(username=regusername, email=regemail)
+            new_user = User(
+                username=regusername, 
+                email=regemail
+            )
             new_user.set_password(regpassword1)  # Set the password
             db.session.add(new_user)  # Add the user to the session
             db.session.commit()
+            login_user(new_user, remember=True)
+            flash('Account created!', category='success')
+            return redirect(url_for('views.home'))
 
         
-    return render_template('register.html')
+    return render_template('register.html', user=current_user)
 
 

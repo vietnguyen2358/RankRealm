@@ -35,9 +35,15 @@
                     <a class="nav-item nav-link" href="/event">Events</a>
                     <a class="nav-item nav-link" href="/games">Games</a>
                     <a class="nav-item nav-link" href="/about">About</a>
+                    {% if current_user.is_authenticated %}
+                    <a class="nav-item nav-link" href="/logout" style="border-bottom-right-radius: 10px;">
+                        Logout
+                    </a>
+                    {% else %}
                     <a class="nav-item nav-link" href="/login" style="border-bottom-right-radius: 10px;">
                         Login
                     </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

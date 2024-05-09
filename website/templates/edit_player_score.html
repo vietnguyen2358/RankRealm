@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Edit Player Score | Rank Realm{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-4 offset-4">
+        <div class="card mt-5 mb-3">
+            <form method="post">
+                <h1 class="text-center my-5" id="welcome">Edit Player Score</h1>
+                <div class="card-body">
+                    <label>Player:</label>
+                    <select class="form-control" id="player_id" name="player_id" required>
+                        {% for user in users %}
+                        <option value="{{ user.id }}" {% if user.id == player_score.player_id %}selected{% endif %}>{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="card-body">
+                    <label>Leaderboard:</label>
+                    <select class="form-control" id="leaderboard_id" name="leaderboard_id" required>
+                        {% for leaderboard in leaderboards %}
+                        <option value="{{ leaderboard.id }}" {% if leaderboard.id == player_score.leaderboard_id %}selected{% endif %}>{{ leaderboard.game.title }} - {{ leaderboard.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="card-body">
+                    <label>ELO Rating:</label>
+                    <input type="number" class="form-control" id="elo_rating" name="elo_rating" value="{{ player_score.elo_rating }}" required>
+                </div>
+                <div class="card-body">
+                    <label>Matches Played:</label>
+                    <input type="number" class="form-control" id="matches_played" name="matches_played" value="{{ player_score.matches_played }}" required>
+                </div>
+                <div class="card-body">
+                    <label>Matches Won:</label>
+                    <input type="number" class="form-control" id="matches_won" name="matches_won" value="{{ player_score.matches_won }}" required>
+                </div>
+                <div class="card-body">
+                    <label>Matches Lost:</label>
+                    <input type="number" class="form-control" id="matches_lost" name="matches_lost" value="{{ player_score.matches_lost }}" required>
+                </div>
+                <div class="text-center my-3">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

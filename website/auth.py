@@ -39,6 +39,8 @@ def sign_up():
         regusername = request.form.get('username')
         regpassword1 = request.form.get('password1')
         regpassword2 = request.form.get('password2')
+        is_game_owner = True if request.form.get('is_game_owner') else False
+
         if len(regemail) < 4:
             flash('Email must be greater than 4 characters.', category='error')
         elif len(regusername) < 2:
@@ -50,7 +52,8 @@ def sign_up():
         else:
             new_user = User(
                 username=regusername,
-                email=regemail
+                email=regemail,
+                is_game_owner=is_game_owner
             )
             new_user.set_password(regpassword1)  # Set the password
             db.session.add(new_user)  # Add the user to the session
@@ -162,12 +165,26 @@ def delete_game(game_id):
     db.session.commit()
     return redirect(url_for('auth.admin_dashboard'))
 
+
 @auth.route('/add_leaderboard', methods=['POST'])
 def add_leaderboard():
     if not session.get('admin_logged_in'):
         return redirect(url_for('auth.admin_login'))
     game_id = request.form.get('game_id')
-    new_leaderboard = Leaderboard(game_id=game_id)
+    name = request.form.get('name')
+
+    # Check if the game already has a leaderboard
+    existing_leaderboard = Leaderboard.query.filter_by(game_id=game_id).first()
+
+    if existing_leaderboard:
+        # If a leaderboard already exists, append a number to the name
+        count = Leaderboard.query.filter_by(game_id=game_id).count()
+        name = f"{name} {count + 1}"
+    else:
+        # If it's the first leaderboard for the game, set the name to "Main Leaderboard"
+        name = "Main Leaderboard"
+
+    new_leaderboard = Leaderboard(game_id=game_id, name=name)
     db.session.add(new_leaderboard)
     db.session.commit()
     return redirect(url_for('auth.admin_dashboard'))
@@ -198,12 +215,12 @@ def add_player_score():
     if not session.get('admin_logged_in'):
         return redirect(url_for('auth.admin_login'))
     player_id = request.form.get('player_id')
-    game_id = request.form.get('game_id')
+    leaderboard_id = request.form.get('leaderboard_id')
     elo_rating = request.form.get('elo_rating')
     matches_played = request.form.get('matches_played')
     matches_won = request.form.get('matches_won')
     matches_lost = request.form.get('matches_lost')
-    new_player_score = PlayerScore(player_id=player_id, game_id=game_id, elo_rating=elo_rating, matches_played=matches_played, matches_won=matches_won, matches_lost=matches_lost)
+    new_player_score = PlayerScore(player_id=player_id, leaderboard_id=leaderboard_id, elo_rating=elo_rating, matches_played=matches_played, matches_won=matches_won, matches_lost=matches_lost)
     db.session.add(new_player_score)
     db.session.commit()
     return redirect(url_for('auth.admin_dashboard'))
@@ -214,17 +231,17 @@ def edit_player_score(player_score_id):
         return redirect(url_for('auth.admin_login'))
     player_score = PlayerScore.query.get_or_404(player_score_id)
     users = User.query.all()
-    games = Game.query.all()
+    leaderboards = Leaderboard.query.all()
     if request.method == 'POST':
         player_score.player_id = request.form.get('player_id')
-        player_score.game_id = request.form.get('game_id')
+        player_score.leaderboard_id = request.form.get('leaderboard_id')
         player_score.elo_rating = request.form.get('elo_rating')
         player_score.matches_played = request.form.get('matches_played')
         player_score.matches_won = request.form.get('matches_won')
         player_score.matches_lost = request.form.get('matches_lost')
         db.session.commit()
         return redirect(url_for('auth.admin_dashboard'))
-    return render_template('edit_player_score.html', player_score=player_score, users=users, games=games)
+    return render_template('edit_player_score.html', player_score=player_score, users=users, leaderboards=leaderboards)
 
 @auth.route('/delete_player_score/<int:player_score_id>')
 def delete_player_score(player_score_id):

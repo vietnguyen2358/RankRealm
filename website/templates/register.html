@@ -8,25 +8,31 @@
             <form method="post">
                 <h1 class="text-center my-5" id="welcome">Register</h1>
                 <div class="card-body">
-                    <label >Email:</label>
-                     <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" name="email">
+                    <label>Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
                 </div>
                 <div class="card-body">
                     <label>Username:</label>
-                     <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" name="username">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
                 </div>
                 <div class="card-body">
                     <label>Password:</label>
-                <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter password" name="pwd1">
+                    <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter password" required>
                 </div>
                 <div class="card-body">
                     <label>Re-enter Password:</label>
-                <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password" name="pwd2">
-                </div>    
+                    <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password" required>
+                </div>
+                <div class="card-body">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="is_game_owner" name="is_game_owner">
+                        <label class="form-check-label" for="is_game_owner">Do you plan to host your own game leaderboard?</label>
+                    </div>
+                </div>
                 <div class="text-center my-3">
                     <button type="submit" class="btn btn-primary">Register</button>
                 </div>
-                <p class="text-center my-3">Already have an account?  <a class="bottom" href="{{url_for('auth.login')}}"> Login here</a></p>
+                <p class="text-center my-3">Already have an account? <a class="bottom" href="{{url_for('auth.login')}}">Login here</a></p>
             </form>
         </div>
     </div>

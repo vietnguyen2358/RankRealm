@@ -16,10 +16,10 @@
                     </select>
                 </div>
                 <div class="card-body">
-                    <label>Game:</label>
-                    <select class="form-control" id="game_id" name="game_id" required>
-                        {% for game in games %}
-                        <option value="{{ game.id }}" {% if game.id == player_score.game_id %}selected{% endif %}>{{ game.title }}</option>
+                    <label>Leaderboard:</label>
+                    <select class="form-control" id="leaderboard_id" name="leaderboard_id" required>
+                        {% for leaderboard in leaderboards %}
+                        <option value="{{ leaderboard.id }}" {% if leaderboard.id == player_score.leaderboard_id %}selected{% endif %}>{{ leaderboard.game.title }} - {{ leaderboard.name }}</option>
                         {% endfor %}
                     </select>
                 </div>

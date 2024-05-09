@@ -33,22 +33,30 @@ class Game(db.Model):
 class Leaderboard(db.Model):
    id = db.Column(db.Integer, primary_key=True)
    game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
+   name = db.Column(db.String(150))
+   player_scores = db.relationship('PlayerScore', backref='leaderboard', lazy='dynamic')
+
 
 # Define a player score schema
 class PlayerScore(db.Model):
-   id = db.Column(db.Integer, primary_key=True)
-   player_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-   game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
-   elo_rating = db.Column(db.Integer)
-   matches_played = db.Column(db.Integer)
-   matches_won = db.Column(db.Integer)
-   matches_lost = db.Column(db.Integer)
+    id = db.Column(db.Integer, primary_key=True)
+    player_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    leaderboard_id = db.Column(db.Integer, db.ForeignKey('leaderboard.id'))
+    game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
+    elo_rating = db.Column(db.Integer)
+    matches_played = db.Column(db.Integer)
+    matches_won = db.Column(db.Integer)
+    matches_lost = db.Column(db.Integer)
+    player = db.relationship('User', backref='player_scores')  # Add this line
 
 # Define an event schema
+# Define an event schema
 class Event(db.Model):
-   id = db.Column(db.Integer, primary_key=True)
-   game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
-   host_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-   player_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-   start_date = db.Column(db.DateTime())
-   end_date = db.Column(db.DateTime())
+    id = db.Column(db.Integer, primary_key=True)
+    game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
+    host_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    player_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    start_date = db.Column(db.DateTime())
+    end_date = db.Column(db.DateTime())
+    host = db.relationship('User', foreign_keys=[host_id], backref='hosted_events')  # Add this line
+    player = db.relationship('User', foreign_keys=[player_id], backref='participated_events')  # Add this line

@@ -1,5 +1,7 @@
 from website import create_app
 
+# flask --app main run --debug 
+
 app = create_app()
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, request, abort
 from flask_login import login_required, current_user
+from datetime import datetime
 
 from . import db
 from .models import Game, Leaderboard, PlayerScore
@@ -34,3 +35,49 @@ def join_game(game_id):
                     db.session.add(new_player_score)
                     db.session.commit()
     return redirect(url_for('views.games'))
+
+@views.route('/user-profile')
+@login_required
+def user_profile():
+    owned_games = Game.query.filter_by(owner_id=current_user.id).all()
+    return render_template('user_profile.html', user=current_user, owned_games=owned_games)
+
+@views.route('/update-user-profile', methods=['POST'])
+@login_required
+def update_user_profile():
+    current_user.username = request.form.get('username')
+    current_user.email = request.form.get('email')
+    # Update other user information fields as needed
+    db.session.commit()
+    return redirect(url_for('views.user_profile'))
+
+@views.route('/add-game', methods=['POST'])
+@login_required
+def add_game():
+    if current_user.is_game_owner:
+        title = request.form.get('title')
+        description = request.form.get('description')
+        release_date_str = request.form.get('release_date')
+        release_date = datetime.strptime(release_date_str, '%Y-%m-%d').date()
+        new_game = Game(title=title, description=description, release_date=release_date, owner_id=current_user.id)
+        db.session.add(new_game)
+        db.session.commit()
+
+        # Create a default leaderboard for the game
+        default_leaderboard = Leaderboard(game_id=new_game.id, name="Main Leaderboard")
+        db.session.add(default_leaderboard)
+        db.session.commit()
+
+    return redirect(url_for('views.user_profile'))
+
+
+@views.route('/delete-player-score/<int:player_score_id>', methods=['POST'])
+@login_required
+def delete_player_score(player_score_id):
+    player_score = PlayerScore.query.get_or_404(player_score_id)
+    if player_score.leaderboard.game.owner_id != current_user.id:
+        abort(403)  # Forbidden if the current user is not the game owner
+
+    db.session.delete(player_score)
+    db.session.commit()
+    return redirect(url_for('views.user_profile'))

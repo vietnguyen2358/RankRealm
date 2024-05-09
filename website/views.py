@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for, request, abort
+from flask import Blueprint, render_template, redirect, url_for, request, abort, flash
 from flask_login import login_required, current_user, logout_user
 from datetime import datetime
 
 from . import db
-from .models import Game, Leaderboard, PlayerScore
+from .models import Game, Leaderboard, PlayerScore, User
 
 views = Blueprint('views', __name__)
 
@@ -40,13 +40,14 @@ def join_game(game_id):
 @login_required
 def user_profile():
     owned_games = Game.query.filter_by(owner_id=current_user.id).all()
-    return render_template('user_profile.html', user=current_user, owned_games=owned_games)
-
+    game_owners = User.query.filter_by(is_game_owner=True).all()
+    return render_template('user_profile.html', user=current_user, owned_games=owned_games, game_owners=game_owners)
 @views.route('/update-user-profile', methods=['POST'])
 @login_required
 def update_user_profile():
     current_user.username = request.form.get('username')
     current_user.email = request.form.get('email')
+
     # Update other user information fields as needed
     db.session.commit()
     return redirect(url_for('views.user_profile'))
@@ -133,3 +134,25 @@ def delete_account():
     logout_user()
 
     return redirect(url_for('views.home'))
+
+@views.route('/transfer-ownership/<int:game_id>', methods=['POST'])
+@login_required
+def transfer_ownership(game_id):
+    game = Game.query.get_or_404(game_id)
+    if game.owner_id != current_user.id:
+        abort(403)  # Forbidden if the current user is not the game owner
+
+    new_owner_id = request.form.get('new_owner_id')
+    new_owner = User.query.get(new_owner_id)
+
+    if new_owner:
+        if new_owner.is_game_owner:
+            game.owner_id = new_owner.id
+            db.session.commit()
+            flash('Ownership transferred successfully.', 'success')
+        else:
+            flash('The new owner must have the game owner flag.', 'error')
+    else:
+        flash('User not found.', 'error')
+
+    return redirect(url_for('views.user_profile'))

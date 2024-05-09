@@ -46,6 +46,19 @@
 {% for game in owned_games %}
     <div class="game">
         <h3>{{ game.title }}</h3>
+        <h4>Transfer Ownership</h4>
+        <form action="{{ url_for('views.transfer_ownership', game_id=game.id) }}" method="POST">
+            <div class="form-group">
+                <label for="new_owner_id">New Owner:</label>
+                <select class="form-control" id="new_owner_id" name="new_owner_id" required>
+                    <option value="">Select a new owner</option>
+                    {% for owner in game_owners %}
+                        <option value="{{ owner.id }}">{{ owner.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-warning">Transfer Ownership</button>
+        </form>
         <table>
             <thead>
                 <tr>

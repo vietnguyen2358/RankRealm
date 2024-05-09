@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, abort
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 from datetime import datetime
 
 from . import db
@@ -103,3 +103,33 @@ def delete_game(game_id):
     db.session.commit()
 
     return redirect(url_for('views.user_profile'))
+
+@views.route('/delete-account', methods=['POST'])
+@login_required
+def delete_account():
+    user = current_user
+
+    # Delete player scores associated with the user
+    player_scores = PlayerScore.query.filter_by(player_id=user.id).all()
+    for player_score in player_scores:
+        db.session.delete(player_score)
+
+    # Delete games owned by the user
+    owned_games = Game.query.filter_by(owner_id=user.id).all()
+    for game in owned_games:
+        leaderboards = Leaderboard.query.filter_by(game_id=game.id).all()
+        for leaderboard in leaderboards:
+            player_scores = PlayerScore.query.filter_by(leaderboard_id=leaderboard.id).all()
+            for player_score in player_scores:
+                db.session.delete(player_score)
+            db.session.delete(leaderboard)
+        db.session.delete(game)
+
+    # Delete the user account
+    db.session.delete(user)
+    db.session.commit()
+
+    # Log out the user
+    logout_user()
+
+    return redirect(url_for('views.home'))

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}User Profile | Rank Realm{% endblock %}
+
+{% block content %}
+<h1>User Profile</h1>
+
+<form method="POST" action="{{ url_for('views.update_user_profile') }}">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+    </div>
+    <!-- Add more form fields for user information as needed -->
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+</form>
+
+{% if user.is_game_owner %}
+<h2>Add Game</h2>
+<form method="POST" action="{{ url_for('views.add_game') }}">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="release_date">Release Date</label>
+        <input type="date" class="form-control" id="release_date" name="release_date" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Game</button>
+</form>
+
+<h2>Games You Own</h2>
+{% for game in owned_games %}
+    <div class="game">
+        <h3>{{ game.title }}</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>ELO Rating</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leaderboard in game.leaderboards %}
+                    {% for player_score in leaderboard.player_scores %}
+                        <tr>
+                            <td>{{ player_score.player.username }}</td>
+                            <td>{{ player_score.elo_rating }}</td>
+                            <td>
+                                <a href="{{ url_for('views.delete_player_score', player_score_id=player_score.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to BAN this player from your leaderboard?')">BAN</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    <a href="{{ url_for('views.delete_game', game_id=game.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this game?')">Delete Game</a>
+    </div>
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}

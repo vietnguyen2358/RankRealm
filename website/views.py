@@ -81,3 +81,25 @@ def delete_player_score(player_score_id):
     db.session.delete(player_score)
     db.session.commit()
     return redirect(url_for('views.user_profile'))
+
+
+# TODO: idk why but this method wont let me delete the game if im logged in. if someone can fix this that would be
+#  awesome
+@views.route('/delete-game/<int:game_id>', methods=['POST'])
+@login_required
+def delete_game(game_id):
+    game = Game.query.get_or_404(game_id)
+    if game.owner_id != current_user.id:
+        abort(403)  # Forbidden if the current user is not the game owner
+
+    # Delete the game and its associated leaderboards and player scores
+    leaderboards = Leaderboard.query.filter_by(game_id=game.id).all()
+    for leaderboard in leaderboards:
+        player_scores = PlayerScore.query.filter_by(leaderboard_id=leaderboard.id).all()
+        for player_score in player_scores:
+            db.session.delete(player_score)
+        db.session.delete(leaderboard)
+    db.session.delete(game)
+    db.session.commit()
+
+    return redirect(url_for('views.user_profile'))

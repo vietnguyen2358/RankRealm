@@ -39,6 +39,8 @@ def sign_up():
         regusername = request.form.get('username')
         regpassword1 = request.form.get('password1')
         regpassword2 = request.form.get('password2')
+        is_game_owner = True if request.form.get('is_game_owner') else False
+
         if len(regemail) < 4:
             flash('Email must be greater than 4 characters.', category='error')
         elif len(regusername) < 2:
@@ -50,7 +52,8 @@ def sign_up():
         else:
             new_user = User(
                 username=regusername,
-                email=regemail
+                email=regemail,
+                is_game_owner=is_game_owner
             )
             new_user.set_password(regpassword1)  # Set the password
             db.session.add(new_user)  # Add the user to the session

@@ -156,3 +156,42 @@ def transfer_ownership(game_id):
         flash('User not found.', 'error')
 
     return redirect(url_for('views.user_profile'))
+
+@views.route('/update-score/<int:game_id>', methods=['POST'])
+@login_required
+def update_score(game_id):
+    game = Game.query.get_or_404(game_id)
+    leaderboard = Leaderboard.query.filter_by(game_id=game.id).first()
+
+    if leaderboard:
+        player_score = PlayerScore.query.filter_by(leaderboard_id=leaderboard.id, player_id=current_user.id).first()
+
+        if player_score:
+            points_scored = int(request.form.get('points_scored'))
+            points_against = int(request.form.get('points_against'))
+
+            # Calculate the new ELO rating
+            k_factor = 32
+            expected_score = 1 / (1 + 10 ** ((points_against - points_scored) / 400))
+            actual_score = 1 if points_scored > points_against else 0
+            elo_change = k_factor * (actual_score - expected_score)
+
+            new_elo_rating = player_score.elo_rating + elo_change
+            new_elo_rating = max(10, min(new_elo_rating, 1500))  # Clamp the ELO rating between 10 and 1500
+
+            player_score.elo_rating = int(new_elo_rating)
+            player_score.matches_played += 1
+
+            if points_scored > points_against:
+                player_score.matches_won += 1
+            else:
+                player_score.matches_lost += 1
+
+            db.session.commit()
+            flash('Score updated successfully.', 'success')
+        else:
+            flash('Player score not found.', 'error')
+    else:
+        flash('Leaderboard not found.', 'error')
+
+    return redirect(url_for('views.games'))

@@ -27,7 +27,7 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User, Game, Leaderboard, PlayerPerformance, Event
+    from .models import User, Game, Leaderboard, PlayerScore, Event
 
     create_database(app)
 

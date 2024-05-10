@@ -3,7 +3,7 @@ from flask_login import login_required, current_user, logout_user
 from datetime import datetime
 
 from . import db
-from .models import Game, Leaderboard, PlayerScore, User
+from .models import Game, Leaderboard, PlayerScore, User, Event, EventLeaderboard
 
 views = Blueprint('views', __name__)
 
@@ -195,3 +195,75 @@ def update_score(game_id):
         flash('Leaderboard not found.', 'error')
 
     return redirect(url_for('views.games'))
+
+@views.route('/event')
+@login_required
+def events():
+    events = Event.query.all()
+    games = Game.query.all()
+    return render_template('event.html', events=events, games=games)
+
+@views.route('/create-event', methods=['POST'])
+@login_required
+def create_event():
+    game_id = request.form.get('game_id')
+    start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%dT%H:%M')
+    end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%dT%H:%M')
+
+    new_event = Event(game_id=game_id, owner_id=current_user.id, start_date=start_date, end_date=end_date)
+    db.session.add(new_event)
+    db.session.commit()
+
+    return redirect(url_for('views.events'))
+
+@views.route('/event/<int:event_id>')
+@login_required
+def individual_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    event_leaderboard = EventLeaderboard.query.filter_by(event_id=event_id).all()
+
+    main_leaderboard = Leaderboard.query.filter_by(game_id=event.game_id, name='Main Leaderboard').first()
+    eligible_players = [entry.player for entry in main_leaderboard.player_scores]
+
+    return render_template('individual_event.html', event=event, event_leaderboard=event_leaderboard, eligible_players=eligible_players)
+
+@views.route('/add-player-to-event/<int:event_id>', methods=['POST'])
+@login_required
+def add_player_to_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    if event.owner_id != current_user.id:
+        abort(403)  # Forbidden if the current user is not the event owner
+
+    player_id = request.form.get('player_id')
+
+    new_entry = EventLeaderboard(event_id=event_id, player_id=player_id, elo_rating=1000)
+    db.session.add(new_entry)
+    db.session.commit()
+
+    return redirect(url_for('views.individual_event', event_id=event_id))
+
+@views.route('/remove-player-from-event/<int:event_id>/<int:player_id>', methods=['POST'])
+@login_required
+def remove_player_from_event(event_id, player_id):
+    event = Event.query.get_or_404(event_id)
+    if event.owner_id != current_user.id:
+        abort(403)  # Forbidden if the current user is not the event owner
+
+    entry = EventLeaderboard.query.filter_by(event_id=event_id, player_id=player_id).first()
+    if entry:
+        db.session.delete(entry)
+        db.session.commit()
+
+    return redirect(url_for('views.individual_event', event_id=event_id))
+
+@views.route('/delete-event/<int:event_id>', methods=['POST'])
+@login_required
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    if event.owner_id != current_user.id:
+        abort(403)  # Forbidden if the current user is not the event owner
+
+    db.session.delete(event)
+    db.session.commit()
+
+    return redirect(url_for('views.events'))

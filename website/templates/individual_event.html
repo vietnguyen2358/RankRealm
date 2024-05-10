@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Event | Rank Realm{% endblock %}
+
+{% block content %}
+<h1>{{ event.game.title }} - Event</h1>
+
+<h2>Event Leaderboard</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Player</th>
+            <th>ELO Rating</th>
+            {% if current_user.is_authenticated and event.owner_id == current_user.id %}
+                <th>Actions</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in event_leaderboard %}
+            <tr>
+                <td>{{ entry.player.username }}</td>
+                <td>{{ entry.elo_rating }}</td>
+                {% if current_user.is_authenticated and event.owner_id == current_user.id %}
+                    <td>
+                        <form action="{{ url_for('views.remove_player_from_event', event_id=event.id, player_id=entry.player_id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if current_user.is_authenticated and event.owner_id == current_user.id %}
+    <h2>Add Player to Event</h2>
+    <form action="{{ url_for('views.add_player_to_event', event_id=event.id) }}" method="POST">
+        <div class="form-group">
+            <label for="player_id">Player:</label>
+            <select class="form-control" id="player_id" name="player_id" required>
+                {% for player in eligible_players %}
+                    <option value="{{ player.id }}">{{ player.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Player</button>
+    </form>
+{% endif %}
+
+{% endblock %}

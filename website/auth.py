@@ -124,6 +124,12 @@ def delete_user(user_id):
     if not session.get('admin_logged_in'):
         return redirect(url_for('auth.admin_login'))
     user = User.query.get_or_404(user_id)
+
+    # Delete associated data
+    PlayerScore.query.filter_by(player_id=user.id).delete()
+    Event.query.filter_by(owner_id=user.id).delete()
+    Game.query.filter_by(owner_id=user.id).delete()
+
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for('auth.admin_dashboard'))
@@ -161,10 +167,30 @@ def delete_game(game_id):
     if not session.get('admin_logged_in'):
         return redirect(url_for('auth.admin_login'))
     game = Game.query.get_or_404(game_id)
+
+    # Delete associated data
+    Leaderboard.query.filter_by(game_id=game.id).delete()
+    PlayerScore.query.filter_by(game_id=game.id).delete()
+    Event.query.filter_by(game_id=game.id).delete()
+
     db.session.delete(game)
     db.session.commit()
     return redirect(url_for('auth.admin_dashboard'))
 
+@auth.route('/transfer_ownership/<int:game_id>', methods=['GET', 'POST'])
+def transfer_ownership(game_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('auth.admin_login'))
+    game = Game.query.get_or_404(game_id)
+    game_owners = User.query.filter_by(is_game_owner=True).all()
+
+    if request.method == 'POST':
+        new_owner_id = request.form.get('new_owner_id')
+        game.owner_id = new_owner_id
+        db.session.commit()
+        return redirect(url_for('auth.admin_dashboard'))
+
+    return render_template('transfer_ownership.html', game=game, game_owners=game_owners)
 
 @auth.route('/add_leaderboard', methods=['POST'])
 def add_leaderboard():
@@ -206,6 +232,10 @@ def delete_leaderboard(leaderboard_id):
     if not session.get('admin_logged_in'):
         return redirect(url_for('auth.admin_login'))
     leaderboard = Leaderboard.query.get_or_404(leaderboard_id)
+
+    # Delete associated player scores
+    PlayerScore.query.filter_by(leaderboard_id=leaderboard.id).delete()
+
     db.session.delete(leaderboard)
     db.session.commit()
     return redirect(url_for('auth.admin_dashboard'))
@@ -257,11 +287,10 @@ def add_event():
     if not session.get('admin_logged_in'):
         return redirect(url_for('auth.admin_login'))
     game_id = request.form.get('game_id')
-    host_id = request.form.get('host_id')
-    player_id = request.form.get('player_id')
+    owner_id = request.form.get('owner_id')
     start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%dT%H:%M')
     end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%dT%H:%M')
-    new_event = Event(game_id=game_id, host_id=host_id, player_id=player_id, start_date=start_date, end_date=end_date)
+    new_event = Event(game_id=game_id, owner_id=owner_id, start_date=start_date, end_date=end_date)
     db.session.add(new_event)
     db.session.commit()
     return redirect(url_for('auth.admin_dashboard'))
@@ -275,14 +304,12 @@ def edit_event(event_id):
     games = Game.query.all()
     if request.method == 'POST':
         event.game_id = request.form.get('game_id')
-        event.host_id = request.form.get('host_id')
-        event.player_id = request.form.get('player_id')
+        event.owner_id = request.form.get('owner_id')
         event.start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%dT%H:%M')
         event.end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%dT%H:%M')
         db.session.commit()
         return redirect(url_for('auth.admin_dashboard'))
     return render_template('edit_event.html', event=event, users=users, games=games)
-
 @auth.route('/delete_event/<int:event_id>')
 def delete_event(event_id):
     if not session.get('admin_logged_in'):

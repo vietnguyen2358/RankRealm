@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Create Event | Rank Realm{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-4 offset-4">
+        <div class="card mt-5 mb-3">
+            <form method="post">
+                <h1 class="text-center my-5" id="welcome">Create Event</h1>
+                <div class="card-body">
+                    <label>Game:</label>
+                    <select class="form-control" id="game_id" name="game_id" required>
+                        {% for game in games %}
+                        <option value="{{ game.id }}">{{ game.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="card-body">
+                    <label>Host:</label>
+                    <select class="form-control" id="host_id" name="host_id" required>
+                        {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="card-body">
+                    <label>Player:</label>
+                    <select class="form-control" id="player_id" name="player_id" required>
+                        {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="card-body">
+                    <label>Start Date:</label>
+                    <input type="datetime-local" class="form-control" id="start_date" name="start_date" required>
+                </div>
+                <div class="card-body">
+                    <label>End Date:</label>
+                    <input type="datetime-local" class="form-control" id="end_date" name="end_date" required>
+                </div>
+                <div class="text-center my-3">
+                    <button type="submit" class="btn btn-primary">Create Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

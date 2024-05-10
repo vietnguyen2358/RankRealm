@@ -7,3 +7,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     })
 })
+
+document.addEventListener("DOMContentLoaded", () => {
+    let username = document.querySelector('.dropdown > .nav-link.dropdown-toggle');
+    let dropdown = document.querySelector('.dropdown-menu');
+
+    function showDropdown() {
+        dropdown.classList.add('show');
+    }
+
+    function hideDropdown() {
+        dropdown.classList.remove('show');
+    }
+
+    username.addEventListener('mouseenter', showDropdown);
+
+    username.addEventListener('mouseleave', hideDropdown);
+
+    dropdown.addEventListener('mouseenter', showDropdown);
+
+    dropdown.addEventListener('mouseleave', hideDropdown);
+})

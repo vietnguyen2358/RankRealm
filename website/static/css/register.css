@@ -1,0 +1,49 @@
+body {
+    background-image: linear-gradient(to right bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/static/images/loginbackground.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 150% 150%;
+    background-position: 33% 20%;
+}
+.card-body input {
+    width: 375px;
+    height: 47px;
+}
+.card {
+    background-color: #2f2e2e;
+    color: #fff;
+    border-radius: 3%;
+    width: 100%;
+    height: 700px;
+}
+input::placeholder {
+    font-family: 'Petrona', sans-serif;
+    font-size: 20px;
+}
+h1 {
+    font-family: 'Petrona', sans-serif;
+    font-weight: bold;
+    font-size: 60px;
+}
+.text-center button {
+    background-color: black;
+    font-family: 'Petrona', sans-serif;
+    border: none;
+    width: 90px;
+    height: 50px;
+    font-size: 18px;
+}
+.text-center button:hover {
+    background-color: white;
+    color: black;
+}
+.text-center.my-3 a.bottom {
+    color: white;
+}
+.image {
+    background-image: url('../static/images/video-game-characters-wallpaper-e54d4.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 400%;
+    height: 400px;
+}

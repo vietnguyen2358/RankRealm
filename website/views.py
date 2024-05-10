@@ -197,7 +197,6 @@ def update_score(game_id):
     return redirect(url_for('views.games'))
 
 @views.route('/event')
-@login_required
 def events():
     events = Event.query.all()
     games = Game.query.all()

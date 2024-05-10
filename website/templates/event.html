@@ -2,45 +2,69 @@
 
 {% block title %}Events | Rank Realm{% endblock %}
 
+{% block stylesheet %}
+<link rel="stylesheet" href="../static/css/events.css">
+{% endblock %}
+
 {% block content %}
-<h1>Events</h1>
+<div class="d-flex justify-content-center align-items-center" id="add-event-container">
+    <a href="/add_event" class="btn mb-4">Create Event</a>
+</div>
+<div class="diagonal-separator"></div>
+<div class="content-wrapper">
+    <div class="my-5">
+        <h1 class="text-center mb-4">Upcoming Events</h1>
 
-{% if current_user.is_authenticated %}
-    <h2>Create Event</h2>
-    <form action="{{ url_for('views.create_event') }}" method="POST">
-        <div class="form-group">
-            <label for="game_id">Game:</label>
-            <select class="form-control" id="game_id" name="game_id" required>
-                {% for game in games %}
-                    <option value="{{ game.id }}">{{ game.title }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="start_date">Start Date:</label>
-            <input type="datetime-local" class="form-control" id="start_date" name="start_date" required>
-        </div>
-        <div class="form-group">
-            <label for="end_date">End Date:</label>
-            <input type="datetime-local" class="form-control" id="end_date" name="end_date" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Create Event</button>
-    </form>
-{% endif %}
+        <!-- Search bar -->
+        <form class="input-group mb-3" id="search-form">
+            <input type="text" class="search-bar rounded-pill" placeholder="Search for an event">
+        </form>
 
-<h2>Upcoming Events</h2>
-{% for event in events %}
-    <div class="event">
-        <h3>{{ event.game.title }}</h3>
-        <p>Start Date: {{ event.start_date }}</p>
-        <p>End Date: {{ event.end_date }}</p>
-        <a href="{{ url_for('views.individual_event', event_id=event.id) }}" class="btn btn-primary">View Event</a>
-        {% if current_user.is_authenticated and event.owner_id == current_user.id %}
+        <!-- Content -->
+        {% for event in events %}
+        <div class="event">
+            <h3>{{ event.game.title }}</h3>
+            <p>Start Date: {{ event.start_date }}</p>
+            <p>End Date: {{ event.end_date }}</p>
+            <a href="{{ url_for('views.individual_event', event_id=event.id) }}" class="btn btn-primary">View Event</a>
+            {% if current_user.is_authenticated and event.owner_id == current_user.id %}
             <form action="{{ url_for('views.delete_event', event_id=event.id) }}" method="POST" class="d-inline">
                 <button type="submit" class="btn btn-danger">Delete Event</button>
             </form>
-        {% endif %}
+            {% endif %}
+        </div>
+        {% endfor %}
     </div>
-{% endfor %}
+</div>
+
+{% if current_user.is_authenticated %}
+<div class="row">
+    <div class="col-4 offset-4">
+        <div class="card mt-5 mb-3">
+            <h2>Create Event</h2>
+            <form action="{{ url_for('views.create_event') }}" method="POST">
+                <div class="form-group">
+                    <label for="game_id">Game:</label>
+                    <select class="form-control" id="game_id" name="game_id" required>
+                        {% for game in games %}
+                        <option value="{{ game.id }}">{{ game.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="start_date">Start Date:</label>
+                    <input type="datetime-local" class="form-control" id="start_date" name="start_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="end_date">End Date:</label>
+                    <input type="datetime-local" class="form-control" id="end_date" name="end_date" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Event</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endif %}
 
 {% endblock %}

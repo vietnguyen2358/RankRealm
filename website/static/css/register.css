@@ -8,7 +8,6 @@ body {
 .card-body input {
     width: 375px;
     height: 47px;
-    margin-bottom: 0;
 }
 .card {
     background-color: #2f2e2e;
@@ -25,7 +24,6 @@ h1 {
     font-family: 'Petrona', sans-serif;
     font-weight: bold;
     font-size: 60px;
-    margin-bottom: 0;
 }
 .text-center button {
     background-color: black;
@@ -34,7 +32,6 @@ h1 {
     width: 90px;
     height: 50px;
     font-size: 18px;
-    margin-bottom: 0;
 }
 .text-center button:hover {
     background-color: white;

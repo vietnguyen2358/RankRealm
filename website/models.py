@@ -37,6 +37,15 @@ class Leaderboard(db.Model):
    player_scores = db.relationship('PlayerScore', backref='leaderboard', lazy='dynamic')
 
 
+class EventLeaderboard(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+    player_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    elo_rating = db.Column(db.Integer)
+
+    event = db.relationship('Event', backref='event_leaderboard')
+    player = db.relationship('User', backref='event_leaderboard')
+
 # Define a player score schema
 class PlayerScore(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,9 +63,6 @@ class PlayerScore(db.Model):
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
-    host_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    player_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     start_date = db.Column(db.DateTime())
     end_date = db.Column(db.DateTime())
-    host = db.relationship('User', foreign_keys=[host_id], backref='hosted_events')  # Add this line
-    player = db.relationship('User', foreign_keys=[player_id], backref='participated_events')  # Add this line

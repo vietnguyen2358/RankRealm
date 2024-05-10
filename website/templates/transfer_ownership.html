@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Transfer Game Ownership | Admin Panel{% endblock %}
+
+{% block content %}
+<h1>Transfer Game Ownership</h1>
+
+<h2>Game: {{ game.title }}</h2>
+
+<form method="POST" action="{{ url_for('auth.transfer_ownership', game_id=game.id) }}">
+  <div class="form-group">
+    <label for="new_owner_id">New Owner:</label>
+    <select class="form-control" id="new_owner_id" name="new_owner_id" required>
+      {% for owner in game_owners %}
+      <option value="{{ owner.id }}">{{ owner.username }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-warning">Transfer Ownership</button>
+</form>
+
+{% endblock %}

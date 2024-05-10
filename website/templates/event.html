@@ -37,34 +37,4 @@
     </div>
 </div>
 
-{% if current_user.is_authenticated %}
-<div class="row">
-    <div class="col-4 offset-4">
-        <div class="card mt-5 mb-3">
-            <h2>Create Event</h2>
-            <form action="{{ url_for('views.create_event') }}" method="POST">
-                <div class="form-group">
-                    <label for="game_id">Game:</label>
-                    <select class="form-control" id="game_id" name="game_id" required>
-                        {% for game in games %}
-                        <option value="{{ game.id }}">{{ game.title }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="start_date">Start Date:</label>
-                    <input type="datetime-local" class="form-control" id="start_date" name="start_date" required>
-                </div>
-                <div class="form-group">
-                    <label for="end_date">End Date:</label>
-                    <input type="datetime-local" class="form-control" id="end_date" name="end_date" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Create Event</button>
-            </form>
-        </div>
-    </div>
-</div>
-
-{% endif %}
-
 {% endblock %}

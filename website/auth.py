@@ -28,6 +28,10 @@ def logout():
     logout_user()
     return redirect(url_for('auth.login'))
 
+@auth.route('/events')
+def event():
+    return render_template('events.html')
+
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':

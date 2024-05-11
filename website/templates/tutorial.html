@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Tutorial | Rank Realm{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="../static/css/tutorial.css">
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" id="tutorial-info">
+    <h3 class="text-light">RankRealm is a lightweight ranking system built for indie developers that utilizes the
+        established ELO algorithm
+        for fairness and transparency. This provides a user-friendly website with an optional API for easy integration.
+    </h3>
+</div>
+<div class="diagonal-separator"></div>
+<div class="content-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4" id="tutorial-card">
+                <h2>Tutorial</h2>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/VIDEO_ID"
+                        allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" id="example-card">
+                <h2>Examples</h2>
+                <img src="rocket-league-leaderboard.png" class="img-fluid" alt="Leaderboard Example">
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <h3>RankRealm</h3>
+                <div class="line-break"></div>
+                <p>Best ranking system for all gamers</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

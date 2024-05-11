@@ -203,6 +203,10 @@ def events():
     games = Game.query.all()
     return render_template('event.html', events=events, games=games)
 
+@views.route('/tutorial')
+def tutorial():
+    return render_template('tutorial.html')
+
 @views.route('/create-event', methods=['POST'])
 @login_required
 def create_event():

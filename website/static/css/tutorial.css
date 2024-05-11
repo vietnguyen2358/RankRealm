@@ -1,0 +1,61 @@
+body {
+    background-image: linear-gradient(to right bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/static/images/desktop-wallpaper-video-game-themes-afari.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative;
+}
+
+.diagonal-separator {
+    position: absolute;
+    bottom: -25%;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background-color: #fff;
+    transform: skewY(-5deg);
+    transform-origin: top left;
+    z-index: -1;
+}
+
+
+.content-wrapper {
+    padding-top: 40vh;
+}
+
+#tutorial-info {
+    height: 50vh;
+}
+
+#tutorial-info h3 {
+    font-family: sans-serif;
+    font-size: 40px;
+    line-height: 2;
+    text-align: center;
+    color: white;
+    padding: 5vh;
+    padding-top: 30vh;
+}
+
+.line-break {
+    height: 1px;
+    width: 110vh;
+    background-color: black;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+@media (min-width: 992px) {
+    #tutorial-card {
+        margin-right: 10vh;
+    }
+
+    #example-card {
+        margin-left: 10vh;
+    }
+}

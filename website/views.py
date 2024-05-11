@@ -197,7 +197,6 @@ def update_score(game_id):
     return redirect(url_for('views.games'))
 
 @views.route('/event')
-@login_required
 def events():
     events = Event.query.all()
     games = Game.query.all()
@@ -207,18 +206,23 @@ def events():
 def tutorial():
     return render_template('tutorial.html')
 
-@views.route('/create-event', methods=['POST'])
+@views.route('/add_event', methods=['GET', 'POST'])
 @login_required
-def create_event():
-    game_id = request.form.get('game_id')
-    start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%dT%H:%M')
-    end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%dT%H:%M')
+def add_event():
+    if request.method == 'POST':
+        game_id = request.form.get('game_id')
+        start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%dT%H:%M')
+        end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%dT%H:%M')
 
-    new_event = Event(game_id=game_id, owner_id=current_user.id, start_date=start_date, end_date=end_date)
-    db.session.add(new_event)
-    db.session.commit()
+        new_event = Event(game_id=game_id, owner_id=current_user.id, start_date=start_date, end_date=end_date)
+        db.session.add(new_event)
+        db.session.commit()
 
-    return redirect(url_for('views.events'))
+        return redirect(url_for('views.events'))
+
+    games = Game.query.all()
+    users = User.query.all()
+    return render_template('add_event.html', games=games, users=users)
 
 @views.route('/event/<int:event_id>')
 @login_required

@@ -40,10 +40,3 @@ h1 {
 .text-center.my-3 a.bottom {
     color: white;
 }
-.image {
-    background-image: url('../static/images/video-game-characters-wallpaper-e54d4.jpeg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 400%;
-    height: 400px;
-}

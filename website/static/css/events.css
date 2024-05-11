@@ -1,0 +1,61 @@
+body {
+    background-image: linear-gradient(to right bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/static/images/video_game_characters_wallpaper_by_v1d30guy_d60lnsh-fullview.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative;
+}
+
+.event-card {
+    background-color: #444;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.event-card img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.search-bar {
+    width: 30%;
+    height: 50px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.diagonal-separator {
+    position: absolute;
+    bottom: -25%;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background-color: #fff;
+    transform: skewY(-5deg);
+    transform-origin: top left;
+    z-index: -1;
+}
+
+.content-wrapper {
+    padding-top: 20vh;
+}
+
+#add-event-container {
+    height: 50vh;
+}
+
+#add-event-container a {
+    width: 20%;
+    height: 50px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    font-size: 20px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    border-radius: 25px;
+}

@@ -51,6 +51,7 @@ class PlayerScore(db.Model):
 # Define a player score schema
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(150))
     game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     start_date = db.Column(db.DateTime())

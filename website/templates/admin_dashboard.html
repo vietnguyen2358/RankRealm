@@ -91,7 +91,9 @@
         <label for="owner_id">Owner</label>
         <select class="form-control" id="owner_id" name="owner_id" required>
           {% for user in users %}
+          {% if user.is_game_owner %}
           <option value="{{ user.id }}">{{ user.username }}</option>
+          {% endif %}
           {% endfor %}
         </select>
       </div>

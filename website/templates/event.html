@@ -16,22 +16,40 @@
         <h1 class="text-center mb-4">Upcoming Events</h1>
 
         <!-- Search bar -->
-        <form class="input-group mb-3" id="search-form">
-            <input type="text" class="search-bar rounded-pill" placeholder="Search for an event">
+        <form class="input-group mb-3" id="search-form" method="get">
+            <input type="text" class="search-bar rounded-pill" placeholder="Search for an event" name="q">
         </form>
 
         <!-- Content -->
         {% for event in events %}
         <div class="event">
-            <h3>{{ event.game.title }}</h3>
-            <p>Start Date: {{ event.start_date }}</p>
-            <p>End Date: {{ event.end_date }}</p>
-            <a href="{{ url_for('views.individual_event', event_id=event.id) }}" class="btn btn-primary">View Event</a>
-            {% if current_user.is_authenticated and event.owner_id == current_user.id %}
-            <form action="{{ url_for('views.delete_event', event_id=event.id) }}" method="POST" class="d-inline">
-                <button type="submit" class="btn btn-danger">Delete Event</button>
-            </form>
-            {% endif %}
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card" style="width: 18rem;">
+                        <h4 class="card-header">{{ event.title }}</h4>
+                        <div class="card-body">
+                            <h5 class="card-subtitle mb-2 text-body-secondary">{{ event.game.title }}</h5>
+                            <p class="mb-1">Start Date: {{ event.start_date }}</p>
+                            <p>End Date: {{ event.end_date }}</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="{{ url_for('views.individual_event', event_id=event.id) }}"
+                                        class="btn btn-primary">View
+                                        Event</a>
+                                </div>
+                                <div class="col-md-6">
+                                    {% if current_user.is_authenticated and event.owner_id == current_user.id %}
+                                    <form action="{{ url_for('views.delete_event', event_id=event.id) }}" method="POST"
+                                        class="d-inline">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>

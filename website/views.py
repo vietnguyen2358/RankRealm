@@ -196,25 +196,28 @@ def update_score(game_id):
 
     return redirect(url_for('views.games'))
 
-@views.route('/event')
+@views.route('/event', methods=['GET'])
 def events():
-    events = Event.query.all()
-    games = Game.query.all()
+    search_query = request.args.get('q')
+    if search_query:
+        events = Event.query.filter(Event.title.ilike(f"%{search_query}")).all()
+        if not events:
+            flash("No events match your search criteria", "warning")
+            events = []
+    else:
+        events = Event.query.all()
     return render_template('event.html', events=events, games=games)
-
-@views.route('/tutorial')
-def tutorial():
-    return render_template('tutorial.html')
 
 @views.route('/add_event', methods=['GET', 'POST'])
 @login_required
 def add_event():
     if request.method == 'POST':
         game_id = request.form.get('game_id')
+        title = request.form.get('title')
         start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%dT%H:%M')
         end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%dT%H:%M')
 
-        new_event = Event(game_id=game_id, owner_id=current_user.id, start_date=start_date, end_date=end_date)
+        new_event = Event(game_id=game_id, title=title, owner_id=current_user.id, start_date=start_date, end_date=end_date)
         db.session.add(new_event)
         db.session.commit()
 
@@ -275,3 +278,7 @@ def delete_event(event_id):
     db.session.commit()
 
     return redirect(url_for('views.events'))
+
+@views.route('/tutorial')
+def tutorial():
+    return render_template('tutorial.html')

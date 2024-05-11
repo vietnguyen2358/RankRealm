@@ -6,9 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert.remove();
         }, 3000);
     })
-})
 
-document.addEventListener("DOMContentLoaded", () => {
     let username = document.querySelector('.dropdown > .nav-link.dropdown-toggle');
     let dropdown = document.querySelector('.dropdown-menu');
 

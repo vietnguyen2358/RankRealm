@@ -2,11 +2,16 @@
 {% block title %}Rank Realm{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="../static/css/home.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Petrona&display=swap">
+<h1 class="my-5" id="welcome">See how you stack up against other players</h1>
+<div class="diagonal-separator"></div>
+<div class="tab-pane px-3 show active" id="new-user" role="tabpanel" aria-labelledby="nav-user-tab"></div>
 <div class="container">
-    <div class="row mt-5">
-        <div class="col-md-4">
+    <div class="row mt-5 justify-content-center align-items-center">
+        <div class="col-md-4 ">
             <div class="card bg-dark text-white custom-card">
-                <img src="../static/images/valorant-logo-FAB2CA0E55-seeklogo.com.png" class="card-img-top" alt="Valorant Logo">
+                <img src="../static/images/vallogo.png" class="card-img-top" alt="Valorant Logo">
                 <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
                     <a href="#" class="text-white">
                     </a>
@@ -15,7 +20,7 @@
         </div>
         <div class="col-md-4">
             <div class="card bg-dark text-white custom-card">
-                <img src="rocket-league-logo.png" class="card-img-top img-fluid" alt="Rocket League Logo">
+                <img src="../static/images/rllogo.png" class="card-img-top img-fluid" alt="Rocket League Logo">
                 <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
                     <a href="#" class="text-white">
                     </a>
@@ -24,7 +29,7 @@
         </div>
         <div class="col-md-4">
             <div class="card bg-dark text-white custom-card">
-                <img src="../static/images/cs2.jpg" class="card-img-top img-fluid" alt="CS 2 Logo"
+                <img src="../static/images/Cs2_boxart.png" class="card-img-top img-fluid" alt="CS 2 Logo"
                     style="width: min-content;">
                 <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
                     <a href="#" class="text-white">
@@ -32,6 +37,21 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-white custom-card">
+                <img src="../static/images/siegelogo.jpeg" class="card-img-top img-fluid" alt="Siege Logo"
+                    style="width: min-content;">
+                <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
+                    <a href="#" class="text-white">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <p class="text-center my-5">Find Games</p>
+        <p class="text-center my-3">Look at what other players are playing and compare their stats to yours</p>
+        <form class="input-group mb-3" id="search-form">
+            <input type="text" class="search-bar rounded-pill" placeholder="Search for a game">
+        </form>
     </div>
 </div>
 {% endblock %}

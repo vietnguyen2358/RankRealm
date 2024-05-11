@@ -7,7 +7,7 @@ body {
 }
 .card-body input {
     width: 375px;
-    height: 47px;
+    height: 43px;
 }
 .card {
     background-color: #2f2e2e;
@@ -40,10 +40,11 @@ h1 {
 .text-center.my-3 a.bottom {
     color: white;
 }
-.image {
-    background-image: url('../static/images/video-game-characters-wallpaper-e54d4.jpeg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    width: 400%;
-    height: 400px;
+.form-check-label {
+    font-family: 'Petrona', sans-serif;
+    font-size: 15px;
+}
+input[type=checkbox] {
+    width: 20px;
+    height: 20px;
 }

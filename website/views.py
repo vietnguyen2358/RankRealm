@@ -13,7 +13,14 @@ def home():
 
 @views.route('/games')
 def games():
-    games = Game.query.all()
+    search_query = request.args.get('q')
+    if search_query:
+        games = Game.query.filter(Game.title.ilike(f"%{search_query}")).all()
+        if not games:
+            flash("No games match your search criteria", "warning")
+            games = []
+    else:
+        games = Game.query.all()
     leaderboards = {}
     for game in games:
         leaderboard = Leaderboard.query.filter_by(game_id=game.id).first()
@@ -42,6 +49,7 @@ def user_profile():
     owned_games = Game.query.filter_by(owner_id=current_user.id).all()
     game_owners = User.query.filter_by(is_game_owner=True).all()
     return render_template('user_profile.html', user=current_user, owned_games=owned_games, game_owners=game_owners)
+
 @views.route('/update-user-profile', methods=['POST'])
 @login_required
 def update_user_profile():
@@ -279,6 +287,6 @@ def delete_event(event_id):
 
     return redirect(url_for('views.events'))
 
-@views.route('/tutorial')
-def tutorial():
-    return render_template('tutorial.html')
+@views.route('/about')
+def about():
+    return render_template('about.html')

@@ -49,8 +49,8 @@
         </div>
         <p class="text-center my-5">Find Games</p>
         <p class="text-center my-3">Look at what other players are playing and compare their stats to yours</p>
-        <form class="input-group mb-3" id="search-form">
-            <input type="text" class="search-bar rounded-pill" placeholder="Search for a game">
+        <form class="input-group mb-3" id="search-form" method="get" action="{{ url_for('views.games') }}">
+            <input type="text" class="search-bar rounded-pill" placeholder="Search for a game" name="q">
         </form>
     </div>
 </div>

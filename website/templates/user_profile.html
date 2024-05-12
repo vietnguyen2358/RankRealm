@@ -3,13 +3,9 @@
 {% block title %}User Profile | Rank Realm{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="../static/css/user_profile.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Petrona&display=swap">
 <h1>User Profile</h1>
-
-<h2>Delete Account</h2>
-<p>Warning: This action is irreversible and will delete all your data, including owned games, leaderboard entries, and player scores.</p>
-<form action="{{ url_for('views.delete_account') }}" method="POST">
-    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.')">Delete Account</button>
-</form>
 
 <form method="POST" action="{{ url_for('views.update_user_profile') }}">
     <div class="form-group">
@@ -22,6 +18,12 @@
     </div>
     <!-- Add more form fields for user information as needed -->
     <button type="submit" class="btn btn-primary">Update Profile</button>
+</form>
+
+<h2>Delete Account</h2>
+<p>Warning: This action is irreversible and will delete all your data, including owned games, leaderboard entries, and player scores.</p>
+<form action="{{ url_for('views.delete_account') }}" method="POST">
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.')">Delete Account</button>
 </form>
 
 {% if user.is_game_owner %}

@@ -1,0 +1,23 @@
+.btn:hover {
+    background-color: rgb(100, 100, 100);
+    color: black;
+    border: black;
+}
+.btn-primary {
+    background-color: black;
+    font-family: 'Petrona', sans-serif;
+    border: none;
+    margin-top: 1%
+}
+h1 {
+    font-family: 'Petrona', sans-serif;
+    font-weight: bolder;
+}
+h2 {
+    margin-top: 10%;
+    font-family: 'Petrona', sans-serif;
+}
+.card-body input {
+    width: 375px;
+    height: 43px;
+}

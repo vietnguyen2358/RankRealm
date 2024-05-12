@@ -1,8 +1,18 @@
 # Project: RankRealm
 
-## Objective:
-This project aims to democratize competitive gaming by providing a lightweight ranking system tailored for racing games and point-based games. Our goal is to simplify the process of implementing competitive ranking systems, typically only accessible to triple-A studios, for smaller indie developers.
+## Installation Guide
 
-We aim to achieve this by developing an ELO-based ranking system that is user-friendly and easily integrable into existing games. This system will be accompanied by a web interface for easy management and visualization of rankings, as well as an optional API for seamless integration into game environments.
+### Requirements:
+1. Python
+2. Git Bash Terminal (Windows specific)
 
-By offering an accessible solution, we strive to empower indie developers to enhance the competitive aspects of their games, fostering vibrant and engaging gaming communities.
+### Backend imports:
+1. pip install flask
+2. pip install sqlalchemy
+3. pip install flask-sqlalchemy
+4. pip install flask-login
+5. pip install bcrypt
+
+### Setup:
+1. In Git Bash Terminal (Terminal for MacOS), enter the RankRealm project directory
+2. Run the command flask --app main run to start the website
